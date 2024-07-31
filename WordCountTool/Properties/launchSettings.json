@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "WordCountTool": {
+      "commandName": "Project"
+    },
+    "Step1CountBytes": {
+      "commandName": "Project",
+      "commandLineArgs": "-c test.txt"
+    }
+  }
+}

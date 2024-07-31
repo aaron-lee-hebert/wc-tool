@@ -13,4 +13,8 @@
     </None>
   </ItemGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+	<AssemblyName>ccwc</AssemblyName>
+  </PropertyGroup>
+
 </Project>
