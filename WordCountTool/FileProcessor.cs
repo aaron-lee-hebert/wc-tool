@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace WordCountTool {
+﻿namespace WordCountTool {
     public class FileProcessor {
-        public static long GetByteCount(string filePath) => new FileInfo(filePath).Length;
+        public static long GetByteCount(string filePath) => File.ReadAllBytes(filePath).Length;
+
+        public static long GetLineCount(string filePath) => File.ReadAllLines(filePath).Length;
     }
 }
