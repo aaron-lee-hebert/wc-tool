@@ -6,6 +6,10 @@
     "Step1CountBytes": {
       "commandName": "Project",
       "commandLineArgs": "-c test.txt"
+    },
+    "Step2CountLines": {
+      "commandName": "Project",
+      "commandLineArgs": "-l test.txt"
     }
   }
 }

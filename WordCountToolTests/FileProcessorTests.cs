@@ -11,5 +11,13 @@ namespace WordCountToolTests {
             // assert
             Assert.That(result, Is.EqualTo(342190));
         } 
+
+        [Test]
+        public void CanOutputLinesInAFile() {
+            // act
+            var result = FileProcessor.GetLineCount(TestFile);
+            // assert
+            Assert.That(result, Is.EqualTo(7145));
+        }
     }
 }
