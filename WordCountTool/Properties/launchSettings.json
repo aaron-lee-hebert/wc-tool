@@ -10,6 +10,10 @@
     "Step2CountLines": {
       "commandName": "Project",
       "commandLineArgs": "-l test.txt"
+    },
+    "Step3CountWords": {
+      "commandName": "Project",
+      "commandLineArgs": "-w test.txt"
     }
   }
 }
