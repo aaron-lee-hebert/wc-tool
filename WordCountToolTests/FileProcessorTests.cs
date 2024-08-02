@@ -54,5 +54,20 @@ namespace WordCountToolTests {
             Assert.That(result, Is.EqualTo(0));
         }
 
+        [Test]
+        public void CanOutputCharactersInAFile() {
+            // act
+            var result = FileProcessor.GetCharCount(TestFile);
+            // assert
+            Assert.That(result, Is.EqualTo(339292));
+        }
+
+        [Test]
+        public void CanOutputCharactersInAFile_EmptyFile() {
+            // act
+            var result = FileProcessor.GetCharCount(EmptyFile);
+            // assert
+            Assert.That(result, Is.EqualTo(0));
+        }
     }
 }

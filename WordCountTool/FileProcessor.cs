@@ -25,7 +25,18 @@
                 return File.ReadAllText(filePath).Split([' ', '\t', '\n', '\r'], StringSplitOptions.RemoveEmptyEntries).Length;
             }
             catch (Exception ex) {
-                Console.WriteLine($"ERror getting word count: {ex.Message}");
+                Console.WriteLine($"Error getting word count: {ex.Message}");
+                return 0;
+            }
+        }
+
+        public static long GetCharCount(string filePath) {
+            try {
+                var result = File.ReadAllText(filePath).Length;
+                return result != 0 ? result + 1 : result;
+            }
+            catch (Exception ex) {
+                Console.WriteLine($"Error getting character count: {ex.Message}");
                 return 0;
             }
         }
