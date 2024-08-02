@@ -1,7 +1,8 @@
 {
   "profiles": {
     "WordCountTool": {
-      "commandName": "Project"
+      "commandName": "Project",
+      "commandLineArgs": "Assets\\test.txt"
     },
     "Step1CountBytes": {
       "commandName": "Project",
