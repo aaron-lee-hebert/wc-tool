@@ -25,6 +25,9 @@ public class Program {
                 case "-w":
                     Console.WriteLine($"\t{FileProcessor.GetWordCount(filePath)} {filePath}");
                     break;
+                case "-m":
+                    Console.WriteLine($"\t{FileProcessor.GetCharCount(filePath)} {filePath}");
+                    break;
                 default:
                     Console.WriteLine($"Unknown option: {option}");
                     PrintUsage();
@@ -34,10 +37,11 @@ public class Program {
     }
 
     static void PrintUsage() {
-        Console.WriteLine("Usage: ccwc [-c <file-path>] [-l <file-path>] [-w <file-path>]");
+        Console.WriteLine("Usage: ccwc [-c <file-path>] [-l <file-path>] [-w <file-path>] [-m <file-path>]");
         Console.WriteLine("\nExamples:");
         Console.WriteLine("  ccwc -c <file-path>  # Outputs the number of bytes in the file");
         Console.WriteLine("  ccwc -l <file-path>  # Outputs the number of lines in the file");
         Console.WriteLine("  ccwc -w <file-path>  # Outputs the number of words in the file");
+        Console.WriteLine("  ccwc -m <file-path>  # Outputs the number of chars in the file");
     }
 }

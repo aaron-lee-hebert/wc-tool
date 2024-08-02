@@ -5,15 +5,19 @@
     },
     "Step1CountBytes": {
       "commandName": "Project",
-      "commandLineArgs": "-c test.txt"
+      "commandLineArgs": "-c Assets\\test.txt"
     },
     "Step2CountLines": {
       "commandName": "Project",
-      "commandLineArgs": "-l test.txt"
+      "commandLineArgs": "-l Assets\\test.txt"
     },
     "Step3CountWords": {
       "commandName": "Project",
-      "commandLineArgs": "-w test.txt"
+      "commandLineArgs": "-w Assets\\test.txt"
+    },
+    "Step4CountChars": {
+      "commandName": "Project",
+      "commandLineArgs": "-m Assets\\test.txt"
     }
   }
 }
