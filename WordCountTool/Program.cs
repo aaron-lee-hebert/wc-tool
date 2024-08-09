@@ -1,6 +1,11 @@
 ﻿namespace WordCountTool;
 public class Program {
     static void Main(string[] args) {
+        if (Console.IsInputRedirected) {
+            ProcessStandardInput(args);
+            return;
+        }
+
         if (args.Length == 0) {
             PrintUsage();
             return;
@@ -8,8 +13,9 @@ public class Program {
 
         if (args.Length == 1) {
             string filePath = args[0];
+
             if (!CheckFileExists(filePath)) return;
-            Console.WriteLine($"\t{FileProcessor.GetByteCount(filePath)}  {FileProcessor.GetLineCount(filePath)}  {FileProcessor.GetWordCount(filePath)} {filePath}");
+            DefaultProcess(filePath);
             return;
         }
 
@@ -17,27 +23,58 @@ public class Program {
             string option = args[i];
             string filePath = args[i + 1];
 
-            if (!CheckFileExists(filePath)) continue;
-
-            switch (option) {
-                case "-c":
-                    Console.WriteLine($"\t{FileProcessor.GetByteCount(filePath)} {filePath}");
-                    break;
-                case "-l":
-                    Console.WriteLine($"\t{FileProcessor.GetLineCount(filePath)} {filePath}");
-                    break;
-                case "-w":
-                    Console.WriteLine($"\t{FileProcessor.GetWordCount(filePath)} {filePath}");
-                    break;
-                case "-m":
-                    Console.WriteLine($"\t{FileProcessor.GetCharCount(filePath)} {filePath}");
-                    break;
-                default:
-                    Console.WriteLine($"Unknown option: {option}");
-                    PrintUsage();
-                    return;
-            }
+            if (!CheckFileExists(filePath)) return;
+            ProcessFile(option, filePath);
+            return;
         }
+    }
+
+    private static void ProcessStandardInput(string[] args) {
+        string option = (args.Length == 1) ? args[0] : null;
+        string tempFilePath = Path.GetTempFileName();
+
+        try {
+            using (TextReader reader = Console.In)
+            using (StreamWriter writer = new StreamWriter(tempFilePath)) {
+                writer.Write(reader.ReadToEnd());
+            }
+
+            ProcessFile(option, tempFilePath, true);
+
+            File.Delete(tempFilePath);
+        } catch (Exception ex) {
+            Console.WriteLine($"An error occurred: {ex.Message}");
+        }
+    }
+
+    static void ProcessFile(string option, string filePath, bool isStandardInput = false) {
+        var displayFile = !isStandardInput ? filePath : string.Empty;
+        switch (option) {
+            case "-c":
+                Console.WriteLine($"\t{FileProcessor.GetByteCount(filePath)} {displayFile}");
+                break;
+            case "-l":
+                Console.WriteLine($"\t{FileProcessor.GetLineCount(filePath)} {displayFile}");
+                break;
+            case "-w":
+                Console.WriteLine($"\t{FileProcessor.GetWordCount(filePath)} {displayFile}");
+                break;
+            case "-m":
+                Console.WriteLine($"\t{FileProcessor.GetCharCount(filePath)} {displayFile}");
+                break;
+            case null:
+                DefaultProcess(filePath, isStandardInput);
+                break;
+            default:
+                Console.WriteLine($"Unknown option: {option}");
+                if (isStandardInput) File.Delete(filePath);
+                PrintUsage();
+                return;
+        }
+    }
+
+    static void DefaultProcess(string filePath, bool isStandardInput = false) { 
+        Console.WriteLine($"\t{FileProcessor.GetByteCount(filePath)}  {FileProcessor.GetLineCount(filePath)}  {FileProcessor.GetWordCount(filePath)} {(!isStandardInput ? filePath : string.Empty)}");
     }
 
     static void PrintUsage() {
@@ -48,6 +85,7 @@ public class Program {
         Console.WriteLine("  ccwc -l <file-path>  # Outputs the number of lines in the file");
         Console.WriteLine("  ccwc -w <file-path>  # Outputs the number of words in the file");
         Console.WriteLine("  ccwc -m <file-path>  # Outputs the number of chars in the file");
+        Console.WriteLine("\ncat <file-path> | ccwc <option>  # Outputs the option taken from standard input");
     }
 
     static bool CheckFileExists(string filePath) {
