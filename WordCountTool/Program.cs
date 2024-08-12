@@ -1,31 +1,32 @@
 ﻿namespace WordCountTool;
 public class Program {
     static void Main(string[] args) {
-        if (Console.IsInputRedirected) {
-            ProcessStandardInput(args);
-            return;
-        }
+        try {
+            if (Console.IsInputRedirected) {
+                ProcessStandardInput(args);
+                return;
+            }
 
-        if (args.Length == 0) {
+            if (args.Length == 0) {
+                PrintUsage();
+                return;
+            }
+
+            if (args.Length >= 2) {
+                string option = args[0];
+                string filePath = args[1];
+
+                if (!CheckFileExists(filePath)) return;
+                ProcessFile(option, filePath);
+            } else {
+                string filePath = args[0];
+
+                if (!CheckFileExists(filePath)) return;
+                DefaultProcess(filePath);
+            }
+        } catch (Exception ex) {
+            Console.WriteLine($"An error occurred: {ex.Message}");
             PrintUsage();
-            return;
-        }
-
-        if (args.Length == 1) {
-            string filePath = args[0];
-
-            if (!CheckFileExists(filePath)) return;
-            DefaultProcess(filePath);
-            return;
-        }
-
-        for (int i = 0; i < args.Length; i += 2) {
-            string option = args[i];
-            string filePath = args[i + 1];
-
-            if (!CheckFileExists(filePath)) return;
-            ProcessFile(option, filePath);
-            return;
         }
     }
 
@@ -35,17 +36,18 @@ public class Program {
 
         try {
             using (TextReader reader = Console.In)
-            using (StreamWriter writer = new StreamWriter(tempFilePath)) {
+            using (var writer = new StreamWriter(tempFilePath)) {
                 writer.Write(reader.ReadToEnd());
             }
 
             ProcessFile(option, tempFilePath, true);
-
-            File.Delete(tempFilePath);
         } catch (Exception ex) {
             Console.WriteLine($"An error occurred: {ex.Message}");
+        } finally {
+            if (File.Exists(tempFilePath)) File.Delete(tempFilePath);
         }
     }
+
 
     static void ProcessFile(string option, string filePath, bool isStandardInput = false) {
         var displayFile = !isStandardInput ? filePath : string.Empty;
@@ -73,9 +75,8 @@ public class Program {
         }
     }
 
-    static void DefaultProcess(string filePath, bool isStandardInput = false) { 
+    static void DefaultProcess(string filePath, bool isStandardInput = false) =>
         Console.WriteLine($"\t{FileProcessor.GetByteCount(filePath)}  {FileProcessor.GetLineCount(filePath)}  {FileProcessor.GetWordCount(filePath)} {(!isStandardInput ? filePath : string.Empty)}");
-    }
 
     static void PrintUsage() {
         Console.WriteLine("Usage: ccwc [<file-path>] [-c <file-path>] [-l <file-path>] [-w <file-path>] [-m <file-path>]");
